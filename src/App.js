@@ -94,8 +94,6 @@ function App() {
 
 	// useEffect(() => {
 	// }, []);
-
-
 	
 	useEffect(() => {
 		window.onload = () => {
