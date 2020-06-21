@@ -2,10 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import Navigation from "./components/Navigation";
 import PersonImage from "./images/nppl.jpg";
 import gsap from "gsap";
+// import { useIntersection } from "react-use";
 import { ReactComponent as Github } from "./images/Github.svg";
 import { ReactComponent as Linkedn } from "./images/Linkedn.svg";
 import IntroOverlay from "./components/introOverlay";
-import { debounce } from "lodash";
+// import { debounce } from "lodash";
+
+import { Zoom } from 'react-preloaders';
+
+import Swiper from 'react-id-swiper';
 
 let tl = gsap.timeline();
 
@@ -41,14 +46,7 @@ function App() {
 			link: "https://juanalert.com/",
 		},
 	];
-
-	let sections = useRef(null);
-
-	const [slide, setSlide] = useState({
-		one: "active",
-		two: "",
-		three: "",
-	});
+	const [isLoaded, setIsloaded ] = useState(true);
 
 	const [intComplete, setIntcomplete] = useState(false);
 
@@ -59,6 +57,30 @@ function App() {
 		footer_vw: 40,
 	});
 
+	const params = {
+		// slidesPerView: 1, //defualt
+		containerClass: "project-slide",
+		wrapperClass: "project-cards",
+		setWrapperSize: true,
+		breakpoints: {
+			// when window width is >= 320px
+			320: {
+				slidesPerView: 1,
+				spaceBetween: 12,
+			},
+			// when window width is >= 768px
+			768: {
+				slidesPerView: 2,
+				spaceBetween: 16,
+			},
+			// when window width is >= 1024px
+			1024: {
+				spaceBetween: 25,
+				slidesPerView: 3,
+			},
+		}
+	}
+
 	// Effects
 	useEffect(() => {
 		let vh = window.innerHeight * 0.01;
@@ -67,23 +89,23 @@ function App() {
 		if (vw < 4.75) {
 			setStylemenu({ menu_vw: 70, footer_vw: 30 });
 		}
-		console.log(vw);
 		document.documentElement.style.setProperty("--vh", `${vh}px`);
 	}, []);
 
+	// useEffect(() => {
+	// }, []);
+
 	useEffect(() => {
+		window.onload = () => {
+			setIsloaded(false);
+		}
 		IntroAnimation(isComplete);
-	}, []);
+
+	},[])
+
 
 	// functions
 
-	const scrollFunction = debounce((data) => {
-		if (data < 0) {
-			console.log("scroll up");
-		} else if (data > 0) {
-			console.log("scroll down");
-		}
-	}, 500);
 	// // Menu Function
 	const MenuFunction = () => {
 		if (menu) {
@@ -154,29 +176,32 @@ function App() {
 
 	// // intro animation
 	const IntroAnimation = (isComplete) => {
-		tl.from(".intro-line span", 2, {
-			y: 100,
-			ease: "power4.out",
-			delay: 1,
-			skewY: 10,
-			stagger: {
-				amount: 1,
-			},
-		})
-			.to(".intro-line span", 1, {
-				y: "-100",
-				skewY: -10,
-				ease: "power4.inOut",
+
+		if(isLoaded){
+			tl.from(".intro-line span", 2, {
+				y: 100,
+				ease: "power4.out",
+				delay: 1,
+				skewY: 10,
 				stagger: {
-					amount: 0.3,
+					amount: 1,
 				},
 			})
-			.to(".intro-overlay", 0.8, {
-				delay: -0.4,
-				height: 0,
-				ease: "power4.inOut",
-				onComplete: isComplete,
-			});
+				.to(".intro-line span", 1, {
+					y: "-100",
+					skewY: -10,
+					ease: "power4.inOut",
+					stagger: {
+						amount: 0.3,
+					},
+				})
+				.to(".intro-overlay", 0.8, {
+					delay: -0.4,
+					height: 0,
+					ease: "power4.inOut",
+					onComplete: isComplete,
+				});
+		}
 	};
 
 	return (
@@ -222,10 +247,9 @@ function App() {
 					<div className="wrapper">
 						<div
 							className="enable-scroll"
-							ref={(el) => (sections = el)}
-							onWheel={(e) => e.persist(scrollFunction(e.deltaY))}
+							// onWheel={(e) => e.persist(scrollFunction(e.deltaY))}
 						>
-							<div className={`p-section intro ${slide.one}`} data-y="0">
+							<div className="p-section intro">
 								<div className="container">
 									<div className="row v-center">
 										<div className="p-intro">
@@ -252,7 +276,7 @@ function App() {
 									<div className="box"> &nbsp; </div>
 								</div>
 							</div>
-							<div className={`p-section about ${slide.two}`} data-y="-100vh">
+							<div className="p-section about">
 								<div className="container">
 									<div className="row row-fluid v-center">
 										<div className="text-frame">
@@ -301,20 +325,17 @@ function App() {
 									</div>
 								</div>
 							</div>
-							<div
-								className={`p-section projects ${slide.three}`}
-								data-y="-200vh"
-							>
+							<div className="p-section projects">
 								<div className="container">
 									<div className="project-content">
 										<div className="project-header">
 											<p className="s-number">/ 03</p>
 											<h1>Projects.</h1>
-										</div>
-										<div className="project-slide">
-											<div className="project-cards">
-												{projects.map((project) => (
-													<div className="p-card" key={project.id}>
+										</div>										
+										<Swiper {...params}>
+											{projects.map((project) => (
+												<a href={project.link} className="w-max-content" key={project.id}>
+													<div className="p-card">
 														<div className="p-card-wrapper">
 															<div className="p-img">
 																<img
@@ -328,9 +349,9 @@ function App() {
 															</div>
 														</div>
 													</div>
+												</a>
 												))}
-											</div>
-										</div>
+										</Swiper>
 									</div>
 								</div>
 							</div>
@@ -359,7 +380,17 @@ function App() {
 					</div>
 				</div>
 			</div>
-			<Navigation menuClicked={MenuFunction} />
+			<Navigation menuClicked={MenuFunction}/>
+			<div className="scroll-number" style={{ display: "none" }}>
+				<div className="counter">
+					<p className="number">01</p>
+					<div className="length">
+						<span></span>
+					</div>
+					<p className="number">04</p>
+				</div>
+			</div>
+			<Zoom customLoading={isLoaded} time={0} animation="fade"/>
 		</>
 	);
 }

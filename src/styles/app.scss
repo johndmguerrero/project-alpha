@@ -275,6 +275,7 @@ main.content {
 	z-index: 2;
 	right: -20px;
 	transform: scale(1) rotate(90deg);
+
 	@include media("<=SMdesktop") {
 		transform: unset;
 		bottom: 30px;
@@ -308,6 +309,8 @@ main.content {
 				position: absolute;
 				top: 0;
 				height: 100%;
+				transition: all ease-in-out 0.3s;
+				transition-timing-function: cubic-bezier(0,.39,.53,1.03);
 			}
 		}
 	}
@@ -632,16 +635,19 @@ main.content {
 		}
 		.project-slide {
 			margin-bottom: 30px;
-			-webkit-overflow-scrolling: touch;
-			// width: max-content;
-			overflow-x: auto;
+			// -webkit-overflow-scrolling: touch;
+			// // width: max-content;
+			// overflow-x: auto;
 			.project-cards {
 				display: flex;
-				flex-wrap: nowrap;
+				transform: translate3d(0,0,0);
+				// display: flex;
+				// flex-wrap: nowrap;
 				// width: max-content;
 				.p-card {
-					flex: 0 0 auto;
-					margin-right: 16px;
+					// flex: 0 0 auto;
+					// margin-right: 16px;
+					width: max-content;
 					.p-card-wrapper {
 						position: relative;
 						.p-img {

@@ -18,15 +18,7 @@ const Navigation = (props) => {
 				<p>© 2020 John Guerrero.</p>
 			</div>
 
-			<div className="scroll-number">
-				<div className="counter">
-					<p className="number">01</p>
-					<div className="length">
-						<span></span>
-					</div>
-					<p className="number">04</p>
-				</div>
-			</div>
+
 		</>
 	);
 };
