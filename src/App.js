@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState} from "react";
 import Navigation from "./components/Navigation";
 import PersonImage from "./images/nppl.jpg";
 import gsap from "gsap";
@@ -101,7 +101,7 @@ function App() {
 		}
 		IntroAnimation(isComplete);
 
-	},[])
+	},)
 
 
 	// functions
