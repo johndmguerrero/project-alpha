@@ -95,6 +95,8 @@ function App() {
 	// useEffect(() => {
 	// }, []);
 	
+
+	
 	useEffect(() => {
 		window.onload = () => {
 			setIsloaded(false);
